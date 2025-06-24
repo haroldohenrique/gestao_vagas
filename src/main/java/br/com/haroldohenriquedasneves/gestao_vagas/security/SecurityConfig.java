@@ -3,6 +3,8 @@ package br.com.haroldohenriquedasneves.gestao_vagas.security;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
@@ -33,11 +35,28 @@ public class SecurityConfig {
                     auth.requestMatchers("/candidate/").permitAll()
                             .requestMatchers("/company/").permitAll()
                             .anyRequest().authenticated();
-                            // Permite acesso sem autenticação a URLs específicas, como "/candidate/" e "/company/".
-                            // Qualquer outra requisição requer autenticação.
+                    // Permite acesso sem autenticação a URLs específicas, como "/candidate/" e
+                    // "/company/".
+                    // Qualquer outra requisição requer autenticação.
                 });
 
         return http.build();
+
+    }
+
+    /**
+     * Configuração do PasswordEncoder para codificar senhas usando o algoritmo
+     * BCrypt.
+     * 
+     * O BCrypt é um algoritmo de hash seguro e amplamente utilizado para armazenar
+     * senhas.
+     * 
+     * @return uma instância de PasswordEncoder configurada com
+     *         BCryptPasswordEncoder
+     */
+    @Bean
+    public PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
 
     }
 }

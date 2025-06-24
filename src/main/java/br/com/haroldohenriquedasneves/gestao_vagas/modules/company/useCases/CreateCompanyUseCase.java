@@ -1,6 +1,7 @@
 package br.com.haroldohenriquedasneves.gestao_vagas.modules.company.useCases;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.haroldohenriquedasneves.gestao_vagas.exceptions.UserFoundException;
@@ -16,12 +17,19 @@ public class CreateCompanyUseCase {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     public CompanyEntity execute(CompanyEntity companyEntity) {
         this.companyRepository
                 .findByUsernameOrEmail(companyEntity.getUsername(), companyEntity.getEmail())
                 .ifPresent((user) -> {
                     throw new UserFoundException();
                 });
+        var password = passwordEncoder.encode(companyEntity.getPassword());
+        companyEntity.setPassword(password);
+        // Aqui, estamos usando o PasswordEncoder para codificar a senha antes de
+        // salvar a entidade no banco de dados.
 
         return this.companyRepository.save(companyEntity);
     }
