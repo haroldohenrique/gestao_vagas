@@ -7,7 +7,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import br.com.haroldohenriquedasneves.gestao_vagas.modules.company.entities.CompanyEntity;
 
-public interface CompanyRepository extends JpaRepository<CompanyEntity,UUID>{
+public interface CompanyRepository extends JpaRepository<CompanyEntity, UUID> {
     Optional<CompanyEntity> findByUsernameOrEmail(String username, String email);
-    
+    Optional<CompanyEntity> findByUsername(String username);
+
 }
