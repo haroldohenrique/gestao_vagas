@@ -1,8 +1,8 @@
 package br.com.haroldohenriquedasneves.gestao_vagas.modules.company.controllers;
 
-import javax.naming.AuthenticationException;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,12 +26,18 @@ public class AuthCompanyController {
     private AuthCompanyUseCase authCompanyUseCase;
 
     @PostMapping("/company")
-    public String create(@RequestBody AuthCompanyDTO authCompanyDTO) throws AuthenticationException{
+    public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO authCompanyDTO) {
         // Aqui, você deve chamar o caso de uso de autenticação de empresa
         // e retornar a resposta adequada.
-        // Por exemplo, você pode retornar um token JWT ou uma mensagem de sucesso.        
-        return this.authCompanyUseCase.execute(authCompanyDTO);
+        // Por exemplo, você pode retornar um token JWT ou uma mensagem de sucesso.
+        try {
+            var result = authCompanyUseCase.execute(authCompanyDTO);
+            return ResponseEntity.ok().body(result);
+        } catch (Exception e) {
+            //aqui está tratando a exceção de autenticação
+            // Você pode personalizar a mensagem de erro conforme necessário.
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getMessage());
+        }
 
     }
 }
-

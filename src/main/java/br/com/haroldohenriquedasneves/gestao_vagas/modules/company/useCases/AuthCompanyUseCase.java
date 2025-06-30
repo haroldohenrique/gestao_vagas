@@ -1,5 +1,8 @@
 package br.com.haroldohenriquedasneves.gestao_vagas.modules.company.useCases;
 
+import java.time.Duration;
+import java.time.Instant;
+
 import javax.naming.AuthenticationException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,10 +31,10 @@ public class AuthCompanyUseCase {
 
     public String execute(AuthCompanyDTO authCompanyDTO) throws AuthenticationException {
         var company = companyRepository.findByUsername(authCompanyDTO.getUsername())
+                // orElseThrow ta lançando uma exceção se a empresa não for encontrada.
                 .orElseThrow(() -> {
-                    throw new UsernameNotFoundException(
-                            "Company not found with username: " + authCompanyDTO.getUsername());
-                }); // Aqui, você deve lançar uma exceção adequada se a empresa não for encontrada.
+                    throw new UsernameNotFoundException("Username/password incorrect.");
+                });
         var passwordMatches = passwordEncoder.matches(authCompanyDTO.getPassword(), company.getPassword());
         if (!passwordMatches) {
             throw new AuthenticationException();
@@ -42,10 +45,13 @@ public class AuthCompanyUseCase {
         // Por exemplo, você pode retornar a empresa autenticada ou um token JWT.
         // Aqui em baixo, tem o algorithm com a secret
         Algorithm algorithm = Algorithm.HMAC256(secretKey);
-        //withIssuer é o nome do emissor do token, que pode ser o nome da sua empresa ou
+        // withIssuer é o nome do emissor do token, que pode ser o nome da sua empresa
+        // ou
         // qualquer outro identificador que você desejar.
-        //withSubject é o assunto do token, que pode ser o ID da empresa ou qualquer outro identificador exclusivo.
+        // withSubject é o assunto do token, que pode ser o ID da empresa ou qualquer
+        // outro identificador exclusivo.
         var token = JWT.create().withIssuer("empresaHaroldoHenrique")
+                .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
                 .withSubject(company.getId().toString()).sign(algorithm);
         return token;
         // Retorne o token ou a empresa autenticada conforme necessário.
