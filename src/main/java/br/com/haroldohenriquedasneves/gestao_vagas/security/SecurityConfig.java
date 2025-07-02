@@ -41,6 +41,7 @@ public class SecurityConfig {
                     auth.requestMatchers("/candidate/").permitAll()
                             .requestMatchers("/company/").permitAll()
                             .requestMatchers("/auth/company").permitAll()
+                            .requestMatchers("/candidate/auth").permitAll()
                             .anyRequest().authenticated();
                     // Permite acesso sem autenticação a URLs específicas, como "/candidate/" e
                     // "/company/".

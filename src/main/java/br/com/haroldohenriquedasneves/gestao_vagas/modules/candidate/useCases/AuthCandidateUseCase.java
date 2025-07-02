@@ -51,13 +51,16 @@ public class AuthCandidateUseCase {
 
         var algorithm = Algorithm.HMAC256(secretKey);
 
+        var expiresIn = Instant.now().plus(Duration.ofHours(2));
+
         var token = JWT.create()
                 .withIssuer("empresaHaroldoHenrique")
                 // withClaim adiciona uma reivindicação personalizada ao token JWT.
                 // Neste caso, estamos adicionando uma reivindicação chamada "roles" com o
                 // valor de uma lista contendo a string "ROLE_CANDIDATE".
+                //a role vai aparecer no token JWT
                 .withClaim("roles", Arrays.asList("ROLE_CANDIDATE"))
-                .withExpiresAt(Instant.now().plus(Duration.ofHours(2)))
+                .withExpiresAt(expiresIn)
                 .withSubject(candidate.getId().toString())
                 .sign(algorithm);
 
@@ -68,6 +71,9 @@ public class AuthCandidateUseCase {
         // de forma mais legível e concisa.
         var AuthCandidateResponse = AuthCandidateResponseDTO.builder()
                 .access_token(token)
+                //toEpochMilli() converte o Instant para milissegundos desde a época (1 de janeiro de 1970).
+                // Isso é útil para definir o tempo de expiração do token em milissegundos
+                .expires_in(expiresIn.toEpochMilli())
                 .build();
 
         return AuthCandidateResponse;
