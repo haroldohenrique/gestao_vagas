@@ -12,7 +12,7 @@ import br.com.haroldohenriquedasneves.gestao_vagas.modules.company.dto.AuthCompa
 import br.com.haroldohenriquedasneves.gestao_vagas.modules.company.useCases.AuthCompanyUseCase;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/company")
 public class AuthCompanyController {
     // Implementação do controlador para autenticação de empresas
     // Este controlador deve receber as requisições de autenticação, chamar o caso
@@ -25,7 +25,7 @@ public class AuthCompanyController {
     @Autowired
     private AuthCompanyUseCase authCompanyUseCase;
 
-    @PostMapping("/company")
+    @PostMapping("/auth")
     public ResponseEntity<Object> create(@RequestBody AuthCompanyDTO authCompanyDTO) {
         // Aqui, você deve chamar o caso de uso de autenticação de empresa
         // e retornar a resposta adequada.
