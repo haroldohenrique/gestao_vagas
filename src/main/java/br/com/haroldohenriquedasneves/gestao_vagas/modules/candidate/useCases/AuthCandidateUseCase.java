@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
@@ -18,6 +19,7 @@ import br.com.haroldohenriquedasneves.gestao_vagas.modules.candidate.CandidateRe
 import br.com.haroldohenriquedasneves.gestao_vagas.modules.candidate.dto.AuthCandidateRequestDTO;
 import br.com.haroldohenriquedasneves.gestao_vagas.modules.candidate.dto.AuthCandidateResponseDTO;
 
+@Service
 public class AuthCandidateUseCase {
     @Value("${security.token.secret.candidate}")
     private String secretKey;
@@ -49,7 +51,7 @@ public class AuthCandidateUseCase {
             throw new AuthenticationException("Username/password incorrect.");
         }
 
-        var algorithm = Algorithm.HMAC256(secretKey);
+        Algorithm algorithm = Algorithm.HMAC256(secretKey);
 
         var expiresIn = Instant.now().plus(Duration.ofHours(2));
 
@@ -59,9 +61,9 @@ public class AuthCandidateUseCase {
                 // Neste caso, estamos adicionando uma reivindicação chamada "roles" com o
                 // valor de uma lista contendo a string "ROLE_CANDIDATE".
                 //a role vai aparecer no token JWT
+                .withSubject(candidate.getId().toString())
                 .withClaim("roles", Arrays.asList("ROLE_CANDIDATE"))
                 .withExpiresAt(expiresIn)
-                .withSubject(candidate.getId().toString())
                 .sign(algorithm);
 
 

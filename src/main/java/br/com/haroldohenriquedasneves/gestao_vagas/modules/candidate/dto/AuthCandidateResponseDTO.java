@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 //@AllArgsConstructor gera um construtor com todos os parâmetros
 @Data
 @Builder
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class AuthCandidateResponseDTO {
     private String access_token;
     private Long expires_in;
