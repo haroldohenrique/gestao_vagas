@@ -33,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
             FilterChain filterChain)
             throws ServletException, IOException {
 
-        SecurityContextHolder.getContext().setAuthentication(null);
+        // SecurityContextHolder.getContext().setAuthentication(null);
         String header = request.getHeader("Authorization");
 
         // header é onde tá o bearer token, que é o token de autenticação que o usuário

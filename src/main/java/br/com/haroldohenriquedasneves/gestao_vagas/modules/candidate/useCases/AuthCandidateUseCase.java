@@ -62,7 +62,7 @@ public class AuthCandidateUseCase {
                 // valor de uma lista contendo a string "ROLE_CANDIDATE".
                 //a role vai aparecer no token JWT
                 .withSubject(candidate.getId().toString())
-                .withClaim("roles", Arrays.asList("ROLE_CANDIDATE"))
+                .withClaim("roles", Arrays.asList("CANDIDATE"))
                 .withExpiresAt(expiresIn)
                 .sign(algorithm);
 
